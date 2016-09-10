@@ -1,0 +1,14 @@
+{
+	"providers": {
+		"youtube": {
+			"key": "YOUR_API_KEY"
+		},
+		"soundcloud": {
+			"key": "YOUR_API_KEY"
+		}
+	},
+	"facebook": {
+		"id": "YOUR_FB_ID",
+		"secret": "YOUR_FB_SECRET"
+	}
+}
