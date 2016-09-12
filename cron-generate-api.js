@@ -44,7 +44,7 @@ try {
 } catch (e) {
   content = []
 }
-var postIncrementer = 0
+// var postIncrementer = 0
 var userIncrementer = 0
 
 var parsePage = (url, done) => {
@@ -57,7 +57,7 @@ var parsePage = (url, done) => {
       // Attribute them to the user
       var basePostEntries = _.map(postLinks, (postLink) => {
         return {
-          id: postIncrementer++,
+          // id: postIncrementer++,
           link: postLink,
           timestamp: post.updated_time,
           sharedBy: post.from.id,
@@ -72,7 +72,7 @@ var parsePage = (url, done) => {
           var commentLinks = getUrls(comment.message || "")
           return _.map(commentLinks, (commentLink) => {
             return {
-              id: postIncrementer++,
+              // id: postIncrementer++,
               link: commentLink,
               timestamp: comment.created_time,
               sharedBy: comment.from.id,

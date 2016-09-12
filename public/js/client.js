@@ -36,7 +36,7 @@ var phatbeatz = {
 					return user.fb_id === post.sharedBy 
 				}) 
 				$('div#playlist').append(
-					"<button class='list-group-item post-item' data-provider='" + post.provider + "' data-id='"+ post.id + "' data-url='" + post.link + "'>" + 
+					"<button class='list-group-item post-item' data-provider='" + post.provider + "' data-url='" + post.link + "'>" + 
 					"<h4 class='list-group-item-heading'>" + 
 					post.title + 
 					"</h4><p class='list-group-item-text'>Shared by " + 
@@ -89,16 +89,12 @@ var phatbeatz = {
 
 		document.getElementById('playProgress').addEventListener('click', function (e) {
 			var clickedValue = ((e.pageX - $('p.progress-container').offset().left) / $(this).width())
-			// var x = (e.pageX - this.offsetLeft) / $('#playProgress').width(),
-    		// clickedValue = x * this.max / this.offsetWidth;
-			// console.log($(this).width(), clickedValue);
 			var newTime = Math.floor(clickedValue * phatbeatz.currentPlayer.video.duration)
     		phatbeatz.currentPlayer.currentTime(newTime)
 		})
 
 		// end wireup UI
 		phatbeatz.updatePage()
-		// phatbeatz.play()
 		console.log("phtbtz: initialized")
 	},
 	play: () => {
