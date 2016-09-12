@@ -132,13 +132,21 @@ var phatbeatz = {
 		}
 	},
 	awaitPreviousUrl: (callback) => {
-		var prevItem = $('div#playlist button').prev('button.active')
-		if (prevItem.length != 1) {
-			phatbeatz.prevPage(() => {
-				phatbeatz.awaitPrevUrl(callback)
-			})
+		if (!phatbeatz.isPlaying()) {
+			var prevItem = $('div#playlist button').last()
+			phatbeatz.setActivePlaylistElement(prevItem)
+			callback(prevItem.data("url"), prevItem.data("provider"))
+			return
 		}
-		callback(prevItem.data("url"), prevItem.data("provider"))
+		var prevItem = $('div#playlist button.active').prev('button')
+		if (prevItem.length != 1) {
+			phatbeatz.previousPage(() => {
+				phatbeatz.awaitPreviousUrl(callback)
+			})
+		} else {
+			phatbeatz.setActivePlaylistElement(prevItem)
+			callback(prevItem.data("url"), prevItem.data("provider"))
+		}
 	},
 	previousPage: (callback) => {
 		console.log("phtbtz: previous page")
