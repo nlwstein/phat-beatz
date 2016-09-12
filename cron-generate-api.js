@@ -123,16 +123,26 @@ var parsePage = (url, done) => {
   })
 }
 
-var fetchUserData = (done) => {
-  var url = GROUP_ID + "/members?fields=name,administrator,picture"
+var parseUserPage = (url) => {
   fb.api(url, (response) => {
-    userLookup = _.map(response.data || [], (user) => {
+    entries = _.map(response.data || [], (user) => {
       user.fb_id = user.id
       user.id = userIncrementer++
       return user
     })
-    done()
+    userLookup = _.concat(userLookup, entries)
   })
+  if (response.paging != null && response.paging.next != null && response.data.length > 0) {
+    parseUserPage(response.paging.next.replace("https://graph.facebook.com/v2.7/", ""))
+
+  }
+  done()
+}
+
+var fetchUserData = (done) => {
+  var url = GROUP_ID + "/members?fields=name,administrator,picture"
+  parseUrlPage(url)
+  
 }
 
 // Entrypoint
@@ -140,7 +150,7 @@ parsePage(url, () => {
   fetchUserData(() => {
     var response = {
       userLookup: userLookup,
-      content: content
+      content: _.uniqWith(content, _.isEqual)
     }
     // output that shit
     fs.writeFileSync(FILE_NAME, JSON.stringify(response))
