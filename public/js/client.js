@@ -40,7 +40,7 @@ var phatbeatz = {
 					"<h4 class='list-group-item-heading'>" + 
 					post.title + 
 					"</h4><p class='list-group-item-text'>Shared by " + 
-					user.name + " at " + post.timestamp + " -- Provider: " + post.provider + "</p></button>")
+					(typeof user == "undefined") ? "Unknown User" : user.name + " at " + post.timestamp + " -- Provider: " + post.provider + "</p></button>")
 			})
 			$('button.post-item').click((context) => {
 				let post = $(context.currentTarget)
