@@ -32,15 +32,15 @@ var phatbeatz = {
 			$('div#playlist').empty()
 			// Generate UI
 			response.forEach((post) => {
-				/* var user = _.find(phatbeatz._userLookup, (user) => { 
+				var user = _.find(phatbeatz._userLookup, (user) => { 
 					return user.fb_id === post.sharedBy 
-				}) */ 
+				}) 
 				$('div#playlist').append(
 					"<button class='list-group-item post-item' data-provider='" + post.provider + "' data-id='"+ post.id + "' data-url='" + post.link + "'>" + 
 					"<h4 class='list-group-item-heading'>" + 
 					post.title + 
 					"</h4><p class='list-group-item-text'>Shared by " + 
-					"{{User name}}" + " at " + post.timestamp + " -- Provider: " + post.provider + "</p></button>")
+					user.name + " at " + post.timestamp + " -- Provider: " + post.provider + "</p></button>")
 			})
 			$('button.post-item').click((context) => {
 				let post = $(context.currentTarget)
