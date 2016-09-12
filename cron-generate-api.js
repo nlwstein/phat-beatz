@@ -165,7 +165,10 @@ parsePage(url, () => {
   fetchUserData(() => {
     var response = {
       userLookup: userLookup,
-      content: _.uniqWith(content, _.isEqual)
+      content: _.uniqWith(content, (itemA, itemB) => {
+        // pluck unique items while ignoring auto-increment IDs
+        return (itemA.timestamp === itemB.timestamp) && (itemA.link === itemB.link) && (itemA.sharedBy === itemB.sharedBy) && (itemA.postType === itemB.postType)
+      })
     }
     // output that shit
     fs.writeFileSync(FILE_NAME, JSON.stringify(response))
