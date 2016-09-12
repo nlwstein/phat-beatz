@@ -123,7 +123,7 @@ var parsePage = (url, done) => {
   })
 }
 
-var parseUserPage = (url) => {
+var parseUserPage = (url, done) => {
   fb.api(url, (response) => {
     entries = _.map(response.data || [], (user) => {
       user.fb_id = user.id
@@ -133,7 +133,7 @@ var parseUserPage = (url) => {
     userLookup = _.concat(userLookup, entries)
   })
   if (response.paging != null && response.paging.next != null && response.data.length > 0) {
-    parseUserPage(response.paging.next.replace("https://graph.facebook.com/v2.7/", ""))
+    parseUserPage(response.paging.next.replace("https://graph.facebook.com/v2.7/", ""), done)
 
   }
   done()
@@ -141,8 +141,7 @@ var parseUserPage = (url) => {
 
 var fetchUserData = (done) => {
   var url = GROUP_ID + "/members?fields=name,administrator,picture"
-  parseUrlPage(url)
-  
+  parseUserPage(url, done)
 }
 
 // Entrypoint
