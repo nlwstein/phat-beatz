@@ -40,6 +40,7 @@ try {
   var contentRaw = fs.readFileSync('db.json', 'UTF8')
   content = JSON.parse(contentRaw).content
   cachedTimestamp = new Date(content[0].timestamp)
+  console.log(cachedTimestamp)
 } catch (e) {
   content = []
 }
@@ -87,7 +88,8 @@ var parsePage = (url, done) => {
       return cachedTimestamp ? (new Date(entry.timestamp) > cachedTimestamp) : true
     }
     // check to see any entries are pre - last update
-    var setContainsExistingItems = _.some(entries, alreadyExistingPredicate)
+    var setContainsExistingItems = _.some(entries, (entry) => { return !alreadyExistingPredicate(entry) })
+    // reduce the set to exclude any that don't match
     var reducedSet = _.filter(entries, alreadyExistingPredicate)
 
     entries = _.compact(_.map(reducedSet, (entry) => {
