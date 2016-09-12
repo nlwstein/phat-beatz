@@ -35,10 +35,11 @@ var url = GROUP_ID + "/feed?fields=link,message,from,comments{message,created_ti
 var userLookup = {}
 // Actual link content
 var content = []
+var cachedTimestamp = false
 try {
   var contentRaw = fs.readFileSync('db.json', 'UTF8')
   content = JSON.parse(contentRaw).content
-  console.log(content[0].timestamp)
+  cachedTimestamp = new Date(content[0].timestamp)
 } catch (e) {
   content = []
 }
@@ -83,7 +84,7 @@ var parsePage = (url, done) => {
     })
     // how to determine whether an item already exists in the set
     var alreadyExistingPredicate = function(entry) {
-      return (content.length > 0) ? (new Date(entry.timestamp) > new Date(content[0].timestamp)) : true
+      return cachedTimestamp ? (new Date(entry.timestamp) > cachedTimestamp) : true
     }
     // check to see any entries are pre - last update
     var setContainsExistingItems = _.some(entries, alreadyExistingPredicate)
