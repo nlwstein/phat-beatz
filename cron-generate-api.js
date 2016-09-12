@@ -1,5 +1,5 @@
 var fs = require('fs')
-var configRaw = fs.readFileSync('config.json')
+var configRaw = fs.readFileSync('config.json', 'UTF8')
 var config = JSON.parse(configRaw)
 
 var FB = require('fb')
@@ -35,6 +35,13 @@ var url = GROUP_ID + "/feed?fields=link,message,from,comments{message,created_ti
 var userLookup = {}
 // Actual link content
 var content = []
+try {
+  var contentRaw = fs.readFileSync('db.json', 'UTF8')
+  content = JSON.parse(contentRaw).content
+  console.log(content[0].timestamp)
+} catch (e) {
+  content = []
+}
 var postIncrementer = 0
 var userIncrementer = 0
 
@@ -67,15 +74,22 @@ var parsePage = (url, done) => {
               link: commentLink,
               timestamp: comment.created_time,
               sharedBy: comment.from.id,
-              postType: 'comment',
+              postType: 'comment'
             }
           })
         }))
         entries = _.concat(entries, commentEntries)
       }
     })
-    // Filter out the entires that are not currently supported, and add provider specific data:
-    entries = _.compact(_.map(entries, (entry) => {
+    // how to determine whether an item already exists in the set
+    var alreadyExistingPredicate = function(entry) {
+      return (content.length > 0) ? (new Date(entry.timestamp) > new Date(content[0].timestamp)) : true
+    }
+    // check to see any entries are pre - last update
+    var setContainsExistingItems = _.some(entries, alreadyExistingPredicate)
+    var reducedSet = _.filter(entries, alreadyExistingPredicate)
+
+    entries = _.compact(_.map(reducedSet, (entry) => {
       // YouTube
       console.log("Fetching metadata for link: " + entry.link)
       if (entry.link.search(YOUTUBE_URL_REGEX) > -1) {
@@ -115,7 +129,7 @@ var parsePage = (url, done) => {
       return false;
     }))
     content = _.concat(content, entries)
-    if (response.paging != null && response.paging.next != null && response.data.length > 0) {
+    if (response.paging != null && response.paging.next != null && response.data.length > 0 && !setContainsExistingItems) {
       // console.log("Parsed a page!")
       return parsePage(response.paging.next.replace("https://graph.facebook.com/v2.7/", ""), done)
     }
@@ -131,12 +145,11 @@ var parseUserPage = (url, done) => {
       return user
     })
     userLookup = _.concat(userLookup, entries)
+      if (response.paging != null && response.paging.next != null && response.data.length > 0) {
+        return parseUserPage(response.paging.next.replace("https://graph.facebook.com/v2.7/", ""), done)
+      }
+      done()
   })
-  if (response.paging != null && response.paging.next != null && response.data.length > 0) {
-    parseUserPage(response.paging.next.replace("https://graph.facebook.com/v2.7/", ""), done)
-
-  }
-  done()
 }
 
 var fetchUserData = (done) => {
