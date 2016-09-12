@@ -1,17 +1,17 @@
+var jsonServer = require('json-server')
 var fs = require('fs')
 var configRaw = fs.readFileSync('config.json')
 var config = JSON.parse(configRaw)
-
-var FB = require('fb')
-var fb = new FB.Facebook({version: "v2.7", appId: config.facebook.id, appSecret: config.facebook.secret})
-
-var express = require('express')
-var app = express()
+var app = jsonServer.create()
+var router = jsonServer.router('db.json')
+var middlewares = jsonServer.defaults()
+app.use(middlewares)
+app.use('/api', router)
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
-app.use(express.static('web-root'))
-
-app.post('/api/v1/updateToken/', (req, res) => {
+var FB = require('fb')
+var fb = new FB.Facebook({version: "v2.7", appId: config.facebook.id, appSecret: config.facebook.secret})
+app.post('/fb/updateToken/', (req, res) => {
 	var accessToken = req.body.accessToken
 	console.log(accessToken)
 	FB.api('oauth/access_token', {
@@ -31,8 +31,6 @@ app.post('/api/v1/updateToken/', (req, res) => {
 	    res.send("success")
 	})
 })
-app.get('/', (req, res) => {
-
+app.listen(3000, function () {
+  console.log('JSON Server is running')
 })
-app.listen(3001)
-console.log('Listening on port 3001...')

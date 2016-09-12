@@ -1,0 +1,84 @@
+ <html>
+      <style>
+         body {
+    padding-top: 70px;
+  }
+      </style>
+      <head>
+        <script src="/js/popcorn-complete.js"></script>
+        <script src="/js/jquery-3.1.0.min.js"></script>
+        <script src="/js/client.js"></script>
+        <script src="/js/lodash.js"></script>
+        <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+        <link rel = "stylesheet" type = "text/css" href = "/lib/bootstrap/css/bootstrap.min.css"></head>
+     </head>
+    <body>
+      <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href = "#" onclick="window.location.reload()">Phat Beatz 2.0</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li>
+                <p class="navbar-btn">
+                    <a id = "previous-page" href="#" class="btn btn-default">⬅️</a>
+                </p>
+            </li>
+
+            <li>
+                <p class="navbar-btn">
+                    <a id = "next-page" href="#" class="btn btn-default">➡️</a>
+                </p>
+            </li>
+            <li>
+                <p class="navbar-btn">
+                    <a id = "play-prev" href="#" class="btn btn-default">⏪</a>
+                </p>
+            </li>
+            <li>
+                <p class="navbar-btn">
+                    <a id = "play-pause" href="#" class="btn btn-default">⏯</a>
+                </p>
+            </li>
+            <li>
+                <p class="navbar-btn">
+                    <a id = "play-next" href="#" class="btn btn-default">⏩</a>
+                </p>
+            </li>
+
+            <li>
+              <p class="navbar-btn progress-container">
+                <progress id="playProgress" min="0" max="1" class="nav navbar-text progress" style="width: 300px; margin-top:10px">
+                <!-- <progress class = "progress center-block" ></progress> --> 
+              </p>
+            </li>
+            <li><a href="#">About</a></li>
+            <li>
+              <div class="navbar-form" role="search">
+                <div class="input-group">
+                  <input id ="search" type="text" class="form-control" placeholder="Search" name="q">
+                  <div class="input-group-btn">
+                    <button class="btn btn-default" id ="search-button" type="button"><i class="glyphicon glyphicon-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+        <div class = "container" id = "playlist-container">
+
+            <div id = "playlist" class="list-group">
+                  <!-- to activate add class active --> 
+                  <!-- <a href="#" class="list-group-item">
+                      <h4 class="list-group-item-heading">TRACK TITLE</h4>
+                      <p class="list-group-item-text">Shared by USER NAME at TIME STAMP</p>
+                  </a> --> 
+            </div>
+            <div id = "player-container">
+            </div>
+            <div id="footnote"></div>
+        </div>
+     </body>
+</html>

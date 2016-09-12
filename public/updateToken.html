@@ -13,13 +13,18 @@
     console.log(response.authResponse.accessToken)
     $.ajax({
     	type: 'POST',
-    	url: '/api/v1/updateToken/',
+    	url: '/fb/updateToken/',
   		// post payload:
   		data: JSON.stringify({ accessToken: response.authResponse.accessToken }),
   		contentType: 'application/json',
   		success: (response) => {
   			console.log(response)
-  		}
+        alert("Token pushed to API. API response: " + response)
+  		}, 
+      error: (error) => {
+        console.log(error)
+        alert("failed to push to API -- error: " + error)
+      }
 	})
     // The response object is returned with a status field that lets the
     // app know the current login status of the person.
