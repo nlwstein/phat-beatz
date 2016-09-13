@@ -31,6 +31,6 @@ app.post('/fb/updateToken/', (req, res) => {
 	    res.send("success")
 	})
 })
-app.listen(80, function () {
+app.listen(config.port, function () {
   console.log('JSON Server is running')
 })
