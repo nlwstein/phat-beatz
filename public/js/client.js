@@ -2,12 +2,12 @@ var phatbeatz = {
 	_userLookup: {},
 	_currentPage: 1,
 	_currentPlayer: {},
-	onSearch: () => {
+	onSearch: function (event) {
 		phatbeatz._currentPage = 1
 		phatbeatz.updatePage()
 	},
 	getSearchFilter: () => {
-		return $('nav #search').val()
+		return $('nav input#search').val()
 	},
 	setActivePlaylistElement: (element) => {
 		$('div#playlist button.active').removeClass('active')
@@ -106,7 +106,7 @@ var phatbeatz = {
 		$('nav a#play-prev').on('click', phatbeatz.previous)
 		$('nav a#play-next').on('click', phatbeatz.next)
 		$('nav input#volume').on('change', phatbeatz.volumeHandler)
-		$('nav #search').submit(phatbeatz.onSearch)
+		$('nav input#search').on('change', phatbeatz.onSearch)
 
 		document.getElementById('playProgress').addEventListener('click', function (e) {
 			var clickedValue = ((e.pageX - $('p.progress-container').offset().left) / $(this).width())
