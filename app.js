@@ -12,6 +12,7 @@ app.use(bodyParser.json())
 var FB = require('fb')
 var fb = new FB.Facebook({version: "v2.7", appId: config.facebook.id, appSecret: config.facebook.secret})
 app.post('/fb/updateToken/', (req, res) => {
+	res.send("intentionally broken :( need to work out security...")
 	var accessToken = req.body.accessToken
 	console.log(accessToken)
 	FB.api('oauth/access_token', {
@@ -22,7 +23,7 @@ app.post('/fb/updateToken/', (req, res) => {
 	}, function (fbApiResponse) {
 	    if(!fbApiResponse || fbApiResponse.error) {
 	        console.log(!res ? 'error occurred' : fbApiResponse.error);
-	        return;
+	        res.send("failure")
 	    }
 	    var extendedAccessToken = fbApiResponse.access_token;
 	    var expires = fbApiResponse.expires ? fbApiResponse.expires : 0;
