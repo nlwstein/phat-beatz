@@ -35,6 +35,7 @@ var url = GROUP_ID + "/feed?fields=link,message,from,comments{message,created_ti
 var userLookup = {}
 // Actual link content
 var content = []
+var newContent = []
 var cachedTimestamp = false
 try {
   var contentRaw = fs.readFileSync('db.json', 'UTF8')
@@ -44,8 +45,6 @@ try {
 } catch (e) {
   content = []
 }
-// var postIncrementer = 0
-var userIncrementer = 0
 
 var parsePage = (url, done) => {
   fb.api(url, (response) => {
@@ -131,11 +130,11 @@ var parsePage = (url, done) => {
       }
       return false;
     }))
-    content = _.concat(content, entries)
+    newContent = _.concat(newContent, entries)
     if (response.paging != null && response.paging.next != null && response.data.length > 0 && !setContainsExistingItems) {
-      // console.log("Parsed a page!")
       return parsePage(response.paging.next.replace("https://graph.facebook.com/v2.7/", ""), done)
     }
+    content = _.concat(newContent, content)
     done()
   })
 }
@@ -144,7 +143,6 @@ var parseUserPage = (url, done) => {
   fb.api(url, (response) => {
     entries = _.map(response.data || [], (user) => {
       user.fb_id = user.id
-      user.id = userIncrementer++
       return user
     })
     userLookup = _.concat(userLookup, entries)

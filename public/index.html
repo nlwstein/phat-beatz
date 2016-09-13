@@ -1,6 +1,13 @@
  <html>
       <style>
          body { padding-top: 70px; }
+          .vranger {
+            margin-top: 20px;
+            transform: rotate(270deg);
+          }
+          .volume-container {
+            width: 40px;
+          }
       </style>
       <head>
         <title>Phat Beatz</title>
@@ -11,6 +18,9 @@
         <script src="/js/lodash.js"></script>
         <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
         <link rel = "stylesheet" type = "text/css" href = "/lib/bootstrap/css/bootstrap.min.css"></head>
+        <style>
+
+        </style>
      </head>
     <body>
       <nav class="navbar navbar-default navbar-fixed-top">
@@ -50,19 +60,23 @@
             <li>
               <p class="navbar-btn progress-container">
                 <progress id="playProgress" min="0" max="1" class="nav navbar-text progress" style="width: 300px; margin-top:10px">
-                <!-- <progress class = "progress center-block" ></progress> --> 
+              </p>
+            </li>
+            <li>
+              <p class="navbar-btn volume-container" class="volume-container">
+                <input type="range" id ="volume" class="vranger" min="0" max="100"/>
               </p>
             </li>
             <li><a href="#">About</a></li>
             <li>
-              <div class="navbar-form" role="search">
+              <form class="navbar-form" id="search">
                 <div class="input-group">
                   <input id ="search" type="text" class="form-control" placeholder="Search" name="q">
                   <div class="input-group-btn">
-                    <button class="btn btn-default" id ="search-button" type="button"><i class="glyphicon glyphicon-search"></i></button>
+                    <button class="btn btn-default" id ="search-button" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                   </div>
                 </div>
-              </div>
+              </form>
             </li>
         </ul>
     </div>

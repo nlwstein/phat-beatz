@@ -35,12 +35,27 @@ var phatbeatz = {
 				var user = _.find(phatbeatz._userLookup, (user) => { 
 					return user.fb_id === post.sharedBy 
 				}) 
+				// Generate friendly time string
+				var postDate = new Date(post.timestamp)
+				var friendlyTimeString = postDate.getDate() + "/"
+           			+ (postDate.getMonth()+1)  + "/" 
+            		+ postDate.getFullYear() + " @ "  
+            		+ postDate.getHours() + ":"  
+            		+ postDate.getMinutes() + ":" 
+            		+ postDate.getSeconds()
 				$('div#playlist').append(
+					// Ugly UI templating :(
 					"<button class='list-group-item post-item' data-provider='" + post.provider + "' data-url='" + post.link + "'>" + 
 					"<h4 class='list-group-item-heading'>" + 
 					post.title + 
-					"</h4><p class='list-group-item-text'>Shared by " + 
-					(((typeof user == "undefined") || (typeof user.name == "undefined")) ? "Unknown User" : user.name) + " at " + post.timestamp + " -- Provider: " + post.provider + "</p></button>")
+					"</h4><p class='list-group-item-text'>" + 
+					((
+						(typeof user == "undefined") || 
+						(typeof user.picture == "undefined") ||
+						(typeof user.picture.data == "undefined") || 
+						(typeof user.picture.data.url == "undefined")) ? "" : "<img src='" + user.picture.data.url + "' width='20' />") + 
+					" Shared by " + 
+					(((typeof user == "undefined") || (typeof user.name == "undefined")) ? "Unknown User" : user.name) + " at " + friendlyTimeString + " -- Provider: " + post.provider + "</p></button>")
 			})
 			$('button.post-item').click((context) => {
 				let post = $(context.currentTarget)
@@ -76,6 +91,11 @@ var phatbeatz = {
         phatbeatz.currentPlayer.on('ended', phatbeatz.next)
         phatbeatz.currentPlayer.play()
 	},
+	volumeHandler: () => {
+		if (phatbeatz.currentPlayer != null) {
+			phatbeatz.currentPlayer.volume($('input#volume').val() / 100)
+		}
+	},
 	initialize: () => {
 		// Update user lookup
 		phatbeatz.updateUserLookup()
@@ -85,7 +105,8 @@ var phatbeatz = {
 		$('nav a#next-page').on('click', phatbeatz.nextPage)
 		$('nav a#play-prev').on('click', phatbeatz.previous)
 		$('nav a#play-next').on('click', phatbeatz.next)
-		$('nav button#search-button').on('click', phatbeatz.onSearch)
+		$('nav input#volume').on('change', phatbeatz.volumeHandler)
+		$('nav #search').submit(phatbeatz.onSearch)
 
 		document.getElementById('playProgress').addEventListener('click', function (e) {
 			var clickedValue = ((e.pageX - $('p.progress-container').offset().left) / $(this).width())
