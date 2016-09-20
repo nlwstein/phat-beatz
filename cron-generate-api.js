@@ -164,8 +164,13 @@ parsePage(url, () => {
     var response = {
       userLookup: userLookup,
       content: _.uniqWith(content, (itemA, itemB) => {
+        var linkEquivalency = (itemA.link === itemB.link)
+        // Handle YouTube ID equivalency
+        if (itemA.provider === "YOUTUBE" && itemB.provider === "YOUTUBE" && !linkEquivalency) {
+          linkEquivalency = itemA.link.match(YOUTUBE_URL_REGEX)[1] == itemB.link.match(YOUTUBE_URL_REGEX)[1]
+        }
         // pluck unique items while ignoring auto-increment IDs
-        return (itemA.timestamp === itemB.timestamp) && (itemA.link === itemB.link) && (itemA.sharedBy === itemB.sharedBy) && (itemA.postType === itemB.postType)
+        return (linkEquivalency) && (itemA.sharedBy === itemB.sharedBy) && (itemA.postType === itemB.postType)
       })
     }
     // output that shit
